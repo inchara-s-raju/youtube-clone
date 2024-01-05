@@ -6,7 +6,7 @@ import store from './utils.js/store';
 
 function App() {
   return (
-    <div>
+    <div className='box-border'>
       <Provider store={store}>
         <Header />
         <Body />
