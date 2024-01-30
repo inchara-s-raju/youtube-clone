@@ -4,7 +4,13 @@ const MenuItems = ({ items }) => {
   return (
     <ul>
       {items.map((item, index) => (
-        <li id={index}>{item}</li>
+        <li
+          key={index}
+          id={index}
+          className='cursor-pointer hover:bg-slate-100 py-1 px-3 rounded-md '
+        >
+          {item}
+        </li>
       ))}
     </ul>
   );

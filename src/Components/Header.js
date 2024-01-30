@@ -1,12 +1,53 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { toggleMenu } from '../utils.js/appSlice';
+import React, { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { setFilteredList, toggleMenu } from '../utils.js/appSlice';
+import { YOUTUBE_SEARCH_API } from '../utils.js/constants';
+import { cacheResults } from '../utils.js/searchSlice';
 
 const Header = () => {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const [suggestions, setSuggestions] = useState('');
+  const [showSuggestion, setShowSuggestion] = useState(false);
+  const videoList = useSelector((store) => store.app.videoList);
+  const cacheResult = useSelector((store) => store.search);
   const dispatch = useDispatch();
   const toggleMenuHandler = () => {
     dispatch(toggleMenu());
   };
+  const handleListClick = (e) => {
+    console.log('hello', e);
+  };
+
+  useEffect(() => {
+    if (cacheResult[searchQuery]) {
+      setSuggestions(cacheResult[searchQuery]);
+    } else {
+      const timer = setTimeout(() => getSearchSuggetion(), 200);
+
+      return () => clearTimeout(timer);
+    }
+  }, [searchQuery]);
+
+  const getSearchSuggetion = async () => {
+    const res = await fetch(YOUTUBE_SEARCH_API + searchQuery);
+    const json = await res.json();
+    setSuggestions(json[1]);
+    dispatch(
+      cacheResults({
+        [searchQuery]: json[1],
+      })
+    );
+  };
+  const handleSearchClick = () => {
+    const filtered = videoList.filter((video) =>
+      video.snippet.description
+        .toLowerCase()
+        .includes(searchQuery.toLowerCase())
+    );
+    dispatch(setFilteredList(filtered));
+  };
+
   return (
     <div className='grid grid-flow-col p-5 m-0 shadow-md '>
       <div className='flex col-span-1'>
@@ -26,11 +67,35 @@ const Header = () => {
         <input
           type='text'
           placeholder='search'
-          className='bg-slate-100 h-10 border border-solid border-slate-300 w-96 rounded-s-full px-3'
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className='bg-gray-100 h-10 border border-solid border-gray-300 w-96 rounded-s-full px-3'
+          onFocus={() => setShowSuggestion(true)}
+          onBlur={() => setShowSuggestion(false)}
         ></input>
-        <button className='bg-slate-300 h-10 pl-4 pr-4 rounded-e-full'>
+
+        <button
+          className='bg-gray-300 h-10 pl-4 pr-4 rounded-e-full'
+          onClick={handleSearchClick}
+        >
           search
         </button>
+        {showSuggestion && (
+          <div className='absolute bg-white w-96 rounded-md'>
+            <ul>
+              {suggestions &&
+                suggestions.map((suggestion) => (
+                  <li
+                    onClick={() => handleListClick(suggestion)}
+                    key={suggestion}
+                    className='px-2 py-1 hover:bg-slate-100 rounded-full hover:cursor-pointer'
+                  >
+                    {suggestion}
+                  </li>
+                ))}
+            </ul>
+          </div>
+        )}
       </div>
       <div className='col-span-1'>
         <img
