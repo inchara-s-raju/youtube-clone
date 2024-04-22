@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import ChatMessage from './ChatMessage';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLiveChat } from '../utils.js/liveChatSlice';
-import { generateRandomMessage, generateRandomName } from '../utils.js/helper';
+import { setLiveChat } from '../utils/liveChatSlice';
+import { generateRandomMessage, generateRandomName } from '../utils/helper';
 
 const LiveChat = () => {
   const dispatch = useDispatch();
@@ -30,13 +30,13 @@ const LiveChat = () => {
   };
   return (
     <>
-      <div className='w-full h-[550px] ml-2 p-2 border border-black bg-slate-50 rounded-lg overflow-y-scroll flex flex-col-reverse'>
+      <div className='md:w-full md:h-[550px] ml-2 p-2 border border-black bg-slate-50 rounded-lg overflow-y-scroll md:flex flex-col-reverse sm:h-[350px] sm:flex-col'>
         {messages.map((message, index) => (
           <ChatMessage message={message} key={index} />
         ))}
       </div>
       <div className='ml-2 p-2'>
-        <div className='flex gap-2 p-1'>
+        <div className='flex gap-2 p-1 '>
           <img
             src='https://yt4.ggpht.com/ytc/AIf8zZQyD7CrfxYA3hRbqQKMer-GQRabb5N2m3H-_xH1j2CqvxyWKQNYCOYj-mVaR7gb=s32-c-k-c0x00ffffff-no-rj'
             alt='user-logo'

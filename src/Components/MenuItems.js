@@ -7,7 +7,7 @@ const MenuItems = ({ items }) => {
         <li
           key={index}
           id={index}
-          className='cursor-pointer hover:bg-slate-100 py-1 px-3 rounded-md '
+          className='cursor-pointer hover:bg-slate-100 py-3 px-3 rounded-md '
         >
           {item}
         </li>

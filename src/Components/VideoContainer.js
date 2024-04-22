@@ -1,8 +1,8 @@
 import React, { useEffect } from 'react';
 import VideoCard from './VideoCard';
-import { YOUTUBE_VEDIO_API } from '../utils.js/constants';
+import { YOUTUBE_VEDIO_API } from '../utils/constants';
 import { useDispatch, useSelector } from 'react-redux';
-import { setVideoList, setFilteredList } from '../utils.js/appSlice';
+import { setVideoList, setFilteredList } from '../utils/appSlice';
 import { Link } from 'react-router-dom';
 
 const VideoContainer = () => {

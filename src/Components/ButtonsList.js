@@ -20,7 +20,7 @@ const ButtonsList = () => {
     'bollyhood',
   ];
   return (
-    <div>
+    <div className='sm:hidden'>
       <Button buttons={buttons} />
     </div>
   );

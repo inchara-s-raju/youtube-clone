@@ -14,24 +14,18 @@ function Sidebar() {
     'movies',
     'songs',
     'sports',
-    'sandalhood',
-    'hollyhood',
-    'bollyhood',
   ];
   // Early return Pattern
   if (!isMenuOpen) return null;
   return (
-    <div className='col-span-2 shadow-lg p-2 w-44'>
-      <h1 className='font-bold'>Subscription</h1>
+    <div className='col-span-2 shadow-lg p-5 w-44 '>
       <Link to='/'>
         {' '}
-        <h1>Home</h1>
+        <h1 className='font-bold py-1 px-3'>Home</h1>
       </Link>
-      <MenuItems items={items.slice(0, 6)} />
-      <h1 className='font-bold'>Explore</h1>
-      <MenuItems items={items} />
-      <h1 className='font-bold'>Watch Later</h1>
       <MenuItems items={items.slice(0, 5)} />
+      <h1 className='font-bold py-1 px-3'>Explore</h1>
+      <MenuItems items={items} />
     </div>
   );
 }

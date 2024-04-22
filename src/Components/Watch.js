@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useSearchParams } from 'react-router-dom';
-import { closeMenu, toggleMenu } from '../utils.js/appSlice';
-import { config } from '../utils.js/constants';
+import { closeMenu, toggleMenu } from '../utils/appSlice';
+import { config } from '../utils/constants';
 import Comments from './Comments';
 import LiveChat from './LiveChat';
 
@@ -10,6 +10,8 @@ const Watch = () => {
   const [comments, seComments] = useState([]);
   const { apiKey, baseUrl } = config;
   const [searchParam] = useSearchParams();
+  const videoList = useSelector((store) => store.app.filtereDList);
+  const [visibleDescription, setVisibleDescription] = useState(200);
 
   const dispatch = useDispatch();
   useEffect(() => {
@@ -28,25 +30,57 @@ const Watch = () => {
     // console.log(data.items);
   };
   return (
-    <div className='p-3 pl-20'>
-      <div className='flex w-full'>
-        <div className='w-full'>
+    <div className='p-3 pl-20 sm:flex-col'>
+      <div className='md:flex md:w-full'>
+        <div className='w-full shadow-md'>
           <iframe
-            className='rounded-lg'
-            width='1000'
-            height='550'
+            className='rounded-md sm:w-full sm:h-[450px] md:w-[900px] md:h-[550px] pt-3'
             src={'https://www.youtube.com/embed/' + searchParam.get('v')}
             title='YouTube video player'
             frameborder='0'
             allow='accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share'
             allowfullscreen
           ></iframe>
+          <ul className='w-auto'>
+            {videoList
+              .filter((v) => v.id === searchParam.get('v'))
+              .map((video) => (
+                <div key={video.id}>
+                  <li className='font-bold text-lg pt-3'>
+                    {video.snippet.title}
+                  </li>
+
+                  <li className='text-base py-3 '>
+                    <span className='p-2 rounded-2xl font-semibold'>
+                      {video.snippet.channelTitle}
+                    </span>
+                  </li>
+                  <li className='bg-gray-200  p-3 sm:w-full rounded-md'>
+                    <pre className='text-slate-800 text-sm '>
+                      {video.snippet.description.slice(0, visibleDescription)}
+                      {visibleDescription <
+                        video.snippet.description.length && (
+                        <button
+                          onClick={() =>
+                            setVisibleDescription(
+                              video.snippet.description.length
+                            )
+                          }
+                        >
+                          ... more
+                        </button>
+                      )}
+                    </pre>
+                  </li>
+                </div>
+              ))}
+          </ul>
         </div>
-        <div className='w-full'>
+        <div className='md:w-full sm:mt-3'>
           <LiveChat />
         </div>
       </div>
-      <div className='my-4 '>
+      <div className='md:my-4 sm:mt-3'>
         <h1 className='font-bold text-2xl'>Comments</h1>
         <CommentsList comments={comments} />
       </div>

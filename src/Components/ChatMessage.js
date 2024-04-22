@@ -9,9 +9,9 @@ const ChatMessage = ({ message }) => {
         className='w-12 h-10'
       ></img>
 
-      <span className='font-bold px-2'>{message.name}</span>
+      <span className='font-bold px-2 sm:text-sm'>{message.name}</span>
 
-      <span>{message.message}</span>
+      <span className='sm:text-sm'>{message.message}</span>
     </div>
   );
 };
